@@ -1,0 +1,9 @@
+# downloaded models and per-machine state
+llms/*
+!llms/.gitkeep
+# build output
+dist/
+*.blob
+# caches
+data/cache/
+node_modules/

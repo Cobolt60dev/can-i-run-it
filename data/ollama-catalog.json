@@ -1,0 +1,180 @@
+{
+  "_note": "Curated Ollama library. size = download size in GB of the default (mostly Q4_K_M) tag, params = billions, active = active params for MoE models. Sizes are approximate; Ollama reports the exact size while pulling. Add your own entries freely.",
+  "families": [
+    { "name": "gpt-oss", "title": "gpt-oss", "vendor": "OpenAI", "cats": ["chat", "reasoning", "tools"], "featured": true,
+      "desc": "OpenAI's open-weight MoE reasoning models with tool use and adjustable reasoning effort.",
+      "variants": [
+        { "tag": "gpt-oss:20b", "params": 21, "active": 3.6, "size": 14, "kv": 0.3 },
+        { "tag": "gpt-oss:120b", "params": 117, "active": 5.1, "size": 65, "kv": 0.3 }
+      ]},
+    { "name": "qwen3", "title": "Qwen 3", "vendor": "Alibaba", "cats": ["chat", "reasoning", "tools"], "featured": true,
+      "desc": "Strong all-rounder with thinking / non-thinking modes. The 30B MoE runs fast even with partial offload.",
+      "variants": [
+        { "tag": "qwen3:0.6b", "params": 0.6, "size": 0.52 },
+        { "tag": "qwen3:1.7b", "params": 1.7, "size": 1.4 },
+        { "tag": "qwen3:4b", "params": 4, "size": 2.5 },
+        { "tag": "qwen3:8b", "params": 8.2, "size": 5.2 },
+        { "tag": "qwen3:14b", "params": 14.8, "size": 9.3 },
+        { "tag": "qwen3:30b", "params": 30.5, "active": 3.3, "size": 19 },
+        { "tag": "qwen3:32b", "params": 32.8, "size": 20 },
+        { "tag": "qwen3:235b", "params": 235, "active": 22, "size": 142 }
+      ]},
+    { "name": "qwen3-coder", "title": "Qwen3 Coder", "vendor": "Alibaba", "cats": ["code", "tools"], "featured": true,
+      "desc": "Agentic coding model; the 30B-A3B MoE is the sweet spot for local coding agents.",
+      "variants": [
+        { "tag": "qwen3-coder:30b", "params": 30.5, "active": 3.3, "size": 19 },
+        { "tag": "qwen3-coder:480b", "params": 480, "active": 35, "size": 290 }
+      ]},
+    { "name": "gemma3", "title": "Gemma 3", "vendor": "Google", "cats": ["chat", "vision"], "featured": true,
+      "desc": "Multimodal (text + image) models with 128K context; 12B and 27B are excellent writers.",
+      "variants": [
+        { "tag": "gemma3:270m", "params": 0.27, "size": 0.29 },
+        { "tag": "gemma3:1b", "params": 1, "size": 0.82 },
+        { "tag": "gemma3:4b", "params": 4.3, "size": 3.3 },
+        { "tag": "gemma3:12b", "params": 12.2, "size": 8.1 },
+        { "tag": "gemma3:27b", "params": 27.4, "size": 17 }
+      ]},
+    { "name": "deepseek-r1", "title": "DeepSeek-R1", "vendor": "DeepSeek", "cats": ["reasoning"], "featured": true,
+      "desc": "Chain-of-thought reasoning models; smaller sizes are distilled into Qwen / Llama bases.",
+      "variants": [
+        { "tag": "deepseek-r1:1.5b", "params": 1.5, "size": 1.1 },
+        { "tag": "deepseek-r1:7b", "params": 7.6, "size": 4.7 },
+        { "tag": "deepseek-r1:8b", "params": 8.2, "size": 5.2 },
+        { "tag": "deepseek-r1:14b", "params": 14.8, "size": 9.0 },
+        { "tag": "deepseek-r1:32b", "params": 32.8, "size": 20 },
+        { "tag": "deepseek-r1:70b", "params": 70.6, "size": 43 },
+        { "tag": "deepseek-r1:671b", "params": 671, "active": 37, "size": 404 }
+      ]},
+    { "name": "qwen2.5-coder", "title": "Qwen2.5 Coder", "vendor": "Alibaba", "cats": ["code"], "featured": true,
+      "desc": "Dense code models; great for autocomplete (1.5B/3B) and chat-coding (14B/32B).",
+      "variants": [
+        { "tag": "qwen2.5-coder:0.5b", "params": 0.5, "size": 0.4 },
+        { "tag": "qwen2.5-coder:1.5b", "params": 1.5, "size": 1.0 },
+        { "tag": "qwen2.5-coder:3b", "params": 3.1, "size": 1.9 },
+        { "tag": "qwen2.5-coder:7b", "params": 7.6, "size": 4.7 },
+        { "tag": "qwen2.5-coder:14b", "params": 14.8, "size": 9.0 },
+        { "tag": "qwen2.5-coder:32b", "params": 32.8, "size": 20 }
+      ]},
+    { "name": "llama3.2", "title": "Llama 3.2", "vendor": "Meta", "cats": ["chat", "small", "tools"], "featured": true,
+      "desc": "Tiny, quick models for summarising, routing and on-device assistants.",
+      "variants": [
+        { "tag": "llama3.2:1b", "params": 1.2, "size": 1.3 },
+        { "tag": "llama3.2:3b", "params": 3.2, "size": 2.0 }
+      ]},
+    { "name": "nomic-embed-text", "title": "Nomic Embed Text", "vendor": "Nomic", "cats": ["embedding"], "featured": true,
+      "desc": "Fast, small embedding model for RAG and semantic search.",
+      "variants": [ { "tag": "nomic-embed-text:latest", "params": 0.137, "size": 0.27 } ]},
+    { "name": "mistral-small3.2", "title": "Mistral Small 3.2", "vendor": "Mistral AI", "cats": ["chat", "vision", "tools"],
+      "desc": "24B multimodal model with strong instruction following and function calling.",
+      "variants": [ { "tag": "mistral-small3.2:24b", "params": 24, "size": 15 } ]},
+    { "name": "devstral", "title": "Devstral", "vendor": "Mistral AI", "cats": ["code", "tools"],
+      "desc": "24B agentic coding model built for software-engineering agents.",
+      "variants": [ { "tag": "devstral:24b", "params": 24, "size": 14 } ]},
+    { "name": "magistral", "title": "Magistral", "vendor": "Mistral AI", "cats": ["reasoning"],
+      "desc": "Mistral's 24B reasoning model.",
+      "variants": [ { "tag": "magistral:24b", "params": 24, "size": 14 } ]},
+    { "name": "mistral-nemo", "title": "Mistral NeMo", "vendor": "Mistral AI / NVIDIA", "cats": ["chat", "tools"],
+      "desc": "12B model with 128K context, popular for writing and role-play.",
+      "variants": [ { "tag": "mistral-nemo:12b", "params": 12.2, "size": 7.1 } ]},
+    { "name": "mistral", "title": "Mistral 7B", "vendor": "Mistral AI", "cats": ["chat", "tools"],
+      "desc": "The classic 7B; fast and lightweight.",
+      "variants": [ { "tag": "mistral:7b", "params": 7.2, "size": 4.4 } ]},
+    { "name": "phi4", "title": "Phi-4", "vendor": "Microsoft", "cats": ["chat", "reasoning"],
+      "desc": "14B model trained on high-quality synthetic data; strong at maths and logic.",
+      "variants": [ { "tag": "phi4:14b", "params": 14.7, "size": 9.1 } ]},
+    { "name": "phi4-reasoning", "title": "Phi-4 Reasoning", "vendor": "Microsoft", "cats": ["reasoning"],
+      "desc": "Phi-4 fine-tuned for long chain-of-thought reasoning.",
+      "variants": [ { "tag": "phi4-reasoning:14b", "params": 14.7, "size": 11 } ]},
+    { "name": "phi4-mini", "title": "Phi-4 Mini", "vendor": "Microsoft", "cats": ["chat", "small", "tools"],
+      "desc": "3.8B model with function calling and 128K context.",
+      "variants": [ { "tag": "phi4-mini:3.8b", "params": 3.8, "size": 2.5 } ]},
+    { "name": "gemma3n", "title": "Gemma 3n", "vendor": "Google", "cats": ["chat", "small"],
+      "desc": "Efficient models designed for phones and laptops.",
+      "variants": [
+        { "tag": "gemma3n:e2b", "params": 5, "size": 5.6 },
+        { "tag": "gemma3n:e4b", "params": 8, "size": 7.5 }
+      ]},
+    { "name": "llama3.1", "title": "Llama 3.1", "vendor": "Meta", "cats": ["chat", "tools"],
+      "desc": "Widely supported general model with 128K context.",
+      "variants": [
+        { "tag": "llama3.1:8b", "params": 8, "size": 4.9 },
+        { "tag": "llama3.1:70b", "params": 70.6, "size": 43 },
+        { "tag": "llama3.1:405b", "params": 405, "size": 243 }
+      ]},
+    { "name": "llama3.3", "title": "Llama 3.3", "vendor": "Meta", "cats": ["chat", "tools"],
+      "desc": "70B with quality close to Llama 3.1 405B.",
+      "variants": [ { "tag": "llama3.3:70b", "params": 70.6, "size": 43 } ]},
+    { "name": "llama4", "title": "Llama 4 Scout", "vendor": "Meta", "cats": ["chat", "vision", "tools"],
+      "desc": "109B-total MoE (17B active) multimodal model.",
+      "variants": [ { "tag": "llama4:16x17b", "params": 109, "active": 17, "size": 67 } ]},
+    { "name": "llama3.2-vision", "title": "Llama 3.2 Vision", "vendor": "Meta", "cats": ["vision"],
+      "desc": "Image reasoning and captioning.",
+      "variants": [
+        { "tag": "llama3.2-vision:11b", "params": 10.7, "size": 7.8 },
+        { "tag": "llama3.2-vision:90b", "params": 88, "size": 55 }
+      ]},
+    { "name": "qwen2.5vl", "title": "Qwen2.5-VL", "vendor": "Alibaba", "cats": ["vision"],
+      "desc": "Vision-language models; strong at OCR, documents and charts.",
+      "variants": [
+        { "tag": "qwen2.5vl:3b", "params": 3.8, "size": 3.2 },
+        { "tag": "qwen2.5vl:7b", "params": 8.3, "size": 6.0 },
+        { "tag": "qwen2.5vl:32b", "params": 33.5, "size": 21 },
+        { "tag": "qwen2.5vl:72b", "params": 73.4, "size": 49 }
+      ]},
+    { "name": "minicpm-v", "title": "MiniCPM-V", "vendor": "OpenBMB", "cats": ["vision"],
+      "desc": "Compact 8B vision model.",
+      "variants": [ { "tag": "minicpm-v:8b", "params": 8.1, "size": 5.5 } ]},
+    { "name": "llava", "title": "LLaVA", "vendor": "LLaVA", "cats": ["vision"],
+      "desc": "The original open vision-language assistant.",
+      "variants": [
+        { "tag": "llava:7b", "params": 7, "size": 4.7 },
+        { "tag": "llava:13b", "params": 13, "size": 8.0 },
+        { "tag": "llava:34b", "params": 34, "size": 20 }
+      ]},
+    { "name": "qwq", "title": "QwQ", "vendor": "Alibaba", "cats": ["reasoning"],
+      "desc": "32B reasoning model.",
+      "variants": [ { "tag": "qwq:32b", "params": 32.8, "size": 20 } ]},
+    { "name": "deepseek-coder-v2", "title": "DeepSeek Coder V2 Lite", "vendor": "DeepSeek", "cats": ["code"],
+      "desc": "16B MoE code model (2.4B active) — very fast.",
+      "variants": [ { "tag": "deepseek-coder-v2:16b", "params": 15.7, "active": 2.4, "size": 8.9 } ]},
+    { "name": "starcoder2", "title": "StarCoder2", "vendor": "BigCode", "cats": ["code"],
+      "desc": "Code completion models trained on The Stack v2.",
+      "variants": [
+        { "tag": "starcoder2:3b", "params": 3, "size": 1.7 },
+        { "tag": "starcoder2:7b", "params": 7, "size": 4.0 },
+        { "tag": "starcoder2:15b", "params": 16, "size": 9.1 }
+      ]},
+    { "name": "mixtral", "title": "Mixtral 8x7B", "vendor": "Mistral AI", "cats": ["chat"],
+      "desc": "Classic sparse MoE (13B active).",
+      "variants": [ { "tag": "mixtral:8x7b", "params": 46.7, "active": 12.9, "size": 26 } ]},
+    { "name": "command-r", "title": "Command R", "vendor": "Cohere", "cats": ["chat", "tools"],
+      "desc": "35B model tuned for RAG and tool use.",
+      "variants": [ { "tag": "command-r:35b", "params": 35, "size": 19 } ]},
+    { "name": "granite3.3", "title": "Granite 3.3", "vendor": "IBM", "cats": ["chat", "tools"],
+      "desc": "Business-friendly models with 128K context.",
+      "variants": [
+        { "tag": "granite3.3:2b", "params": 2.5, "size": 1.5 },
+        { "tag": "granite3.3:8b", "params": 8.2, "size": 4.9 }
+      ]},
+    { "name": "smollm2", "title": "SmolLM2", "vendor": "Hugging Face", "cats": ["small"],
+      "desc": "Tiny models that run anywhere.",
+      "variants": [
+        { "tag": "smollm2:135m", "params": 0.135, "size": 0.27 },
+        { "tag": "smollm2:360m", "params": 0.36, "size": 0.73 },
+        { "tag": "smollm2:1.7b", "params": 1.7, "size": 1.8 }
+      ]},
+    { "name": "qwen3-embedding", "title": "Qwen3 Embedding", "vendor": "Alibaba", "cats": ["embedding"],
+      "desc": "Multilingual embedding models, top of the MTEB leaderboard.",
+      "variants": [
+        { "tag": "qwen3-embedding:0.6b", "params": 0.6, "size": 0.64 },
+        { "tag": "qwen3-embedding:4b", "params": 4, "size": 2.5 },
+        { "tag": "qwen3-embedding:8b", "params": 8, "size": 4.7 }
+      ]},
+    { "name": "mxbai-embed-large", "title": "mxbai Embed Large", "vendor": "Mixedbread", "cats": ["embedding"],
+      "desc": "335M embedding model with strong retrieval quality.",
+      "variants": [ { "tag": "mxbai-embed-large:latest", "params": 0.335, "size": 0.67 } ]},
+    { "name": "bge-m3", "title": "BGE-M3", "vendor": "BAAI", "cats": ["embedding"],
+      "desc": "Multilingual, multi-granularity embeddings.",
+      "variants": [ { "tag": "bge-m3:latest", "params": 0.567, "size": 1.2 } ]}
+  ]
+}

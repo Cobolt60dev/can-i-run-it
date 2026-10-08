@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Can I Run It?</title>
+  <meta name="description" content="Detects your hardware, tells you which local AI engine to use, and downloads the models your machine can actually run.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b6cff'/%3E%3Cg stroke='white' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='9' y='9' width='14' height='14' rx='2.5'/%3E%3Cpath d='M13 5v4M19 5v4M13 23v4M19 23v4M5 13h4M5 19h4M23 13h4M23 19h4'/%3E%3Cpath d='m12.5 16 2.5 2.5 4.5-5' stroke-width='2.4'/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32"><rect x="9" y="9" width="14" height="14" rx="2.5"/><path d="M13 5v4M19 5v4M13 23v4M19 23v4M5 13h4M5 19h4M23 13h4M23 19h4"/><path d="m12.5 16 2.5 2.5 4.5-5"/></svg>
+      </div>
+      <div>
+        <h1>Can I Run It?</h1>
+        <p>Checks your machine, picks the right AI engine, and downloads the models that will actually run</p>
+      </div>
+    </div>
+    <div class="status" id="status">
+      <span class="chip" id="chip-ollama"><i class="dot"></i>Ollama…</span>
+      <span class="chip" id="chip-disk"><i class="dot"></i>Disk…</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- ============ Hardware rig ============ -->
+    <aside class="rig">
+      <section class="card">
+        <div class="card-head">
+          <h2>Your hardware</h2>
+          <button class="btn ghost sm" id="btn-detect" title="Read GPU and RAM from this PC">
+            <svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7M21 4v5h-5"/></svg>Detect
+          </button>
+        </div>
+
+        <label class="field">
+          <span>Graphics / accelerator</span>
+          <select id="sel-gpu"></select>
+        </label>
+        <p class="detected" id="detected" hidden></p>
+
+        <div class="grid2" id="custom-fields" hidden>
+          <label class="field"><span>VRAM (GB)</span><input type="number" id="in-vram" min="0" step="1" value="16"></label>
+          <label class="field"><span>Bandwidth (GB/s)</span><input type="number" id="in-bw" min="1" step="10" value="500"></label>
+        </div>
+
+        <div class="pool" id="pool" hidden>
+          <div class="pool-head"><span>GPUs in the pool</span><b id="pool-total"></b></div>
+          <div id="pool-rows"></div>
+          <button class="btn sm ghost block" id="pool-add">
+            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Add GPU
+          </button>
+          <label class="field">
+            <span>Connection</span>
+            <select id="pool-link">
+              <option value="pcie">Same PC (PCIe / NVLink)</option>
+              <option value="network">Separate PCs (networked cluster)</option>
+            </select>
+          </label>
+          <div id="pool-notes"></div>
+        </div>
+
+        <label class="field" id="ram-field">
+          <span>System RAM</span>
+          <select id="sel-ram">
+            <option>8</option><option>16</option><option>24</option><option selected>32</option><option>48</option>
+            <option>64</option><option>96</option><option>128</option><option>192</option><option>256</option>
+          </select>
+        </label>
+
+        <div class="field">
+          <span>Context length</span>
+          <div class="seg" id="seg-ctx" role="radiogroup">
+            <button data-v="4096">4K</button><button data-v="8192">8K</button><button data-v="16384">16K</button><button data-v="32768">32K</button>
+          </div>
+        </div>
+
+        <label class="switch">
+          <input type="checkbox" id="chk-offload" checked>
+          <i></i><span>Allow CPU offload <small>(bigger models, slower)</small></span>
+        </label>
+      </section>
+
+      <section class="card budget" id="budget"></section>
+
+      <button class="btn primary block lg" id="btn-auto">
+        <svg viewBox="0 0 24 24"><path d="M13 3 4 14h7l-1 7 9-11h-7z"/></svg>
+        Auto-pull best models
+      </button>
+      <p class="hint">Picks the largest variant of each recommended family that runs fully on your GPU, then shows you the list before anything downloads.</p>
+    </aside>
+
+    <!-- ============ Content ============ -->
+    <section class="content">
+      <nav class="tabs" role="tablist">
+        <button role="tab" data-tab="guide" class="active">Setup guide <b id="cnt-guide" class="pill-accent" hidden></b></button>
+        <button role="tab" data-tab="ollama">Ollama library <b id="cnt-ollama"></b></button>
+        <button role="tab" data-tab="hf">Hugging Face GGUF</button>
+        <button role="tab" data-tab="jobs">Downloads <b id="cnt-jobs" class="pill-accent" hidden></b></button>
+        <button role="tab" data-tab="installed">Installed <b id="cnt-installed"></b></button>
+      </nav>
+
+      <!-- Setup guide -->
+      <div class="panel active" data-panel="guide">
+        <div id="guide" class="guide"></div>
+      </div>
+
+      <!-- Ollama -->
+      <div class="panel" data-panel="ollama">
+        <div id="o-banner"></div>
+        <div class="toolbar">
+          <div class="search">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="o-q" placeholder="Filter models…">
+          </div>
+          <div class="chips" id="o-cats">
+            <button data-v="all" class="on">All</button><button data-v="chat">Chat</button><button data-v="reasoning">Reasoning</button>
+            <button data-v="code">Code</button><button data-v="vision">Vision</button><button data-v="embedding">Embedding</button><button data-v="small">Small</button><button data-v="uncensored">Uncensored</button>
+          </div>
+          <select id="o-fit" class="compact">
+            <option value="gpu">Full GPU only</option>
+            <option value="fits" selected>Runs (GPU + offload)</option>
+            <option value="all">Show everything</option>
+          </select>
+        </div>
+        <div class="presets">
+          <button class="btn sm" data-preset="smart">Select smart picks</button>
+          <button class="btn sm" data-preset="gpu">Select everything that fits on GPU</button>
+          <button class="btn sm ghost" data-preset="none">Clear selection</button>
+          <span class="muted" id="o-summary"></span>
+        </div>
+        <div class="libsync" id="o-sync"></div>
+        <div id="o-list" class="families"></div>
+        <div class="custom-pull">
+          <span>Any other Ollama tag:</span>
+          <input id="o-custom" placeholder="e.g. hermes3:8b or hf.co/user/repo:Q4_K_M">
+          <button class="btn sm" id="o-custom-btn">Pull</button>
+        </div>
+      </div>
+
+      <!-- Hugging Face -->
+      <div class="panel" data-panel="hf">
+        <div class="toolbar">
+          <form class="search" id="hf-form">
+            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" id="hf-q" placeholder="Search GGUF repos on Hugging Face…">
+          </form>
+          <select id="hf-sort" class="compact">
+            <option value="downloads">Most downloaded</option>
+            <option value="trending">Trending</option>
+            <option value="likes">Most liked</option>
+            <option value="recent">Recently updated</option>
+          </select>
+          <select id="hf-target" class="compact" title="Where Hugging Face models go">
+            <option value="file">Save .gguf to llms/</option>
+            <option value="ollama">Pull into Ollama</option>
+          </select>
+        </div>
+        <div class="unc-scan">
+          <button class="btn sm" id="hf-unc">
+            <svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.5-2"/></svg>Scan for uncensored models
+          </button>
+          <span class="muted">Searches uncensored, abliterated, heretic and Dolphin builds that fit your hardware. They save to <span class="mono">llms/uncensored</span>.</span>
+        </div>
+        <div class="chips quick" id="hf-quick">
+          <button data-q="">Top</button><button data-q="Qwen3">Qwen3</button><button data-q="gpt-oss">gpt-oss</button>
+          <button data-q="gemma-3">Gemma 3</button><button data-q="Llama">Llama</button><button data-q="Mistral">Mistral</button>
+          <button data-q="DeepSeek">DeepSeek</button><button data-q="Coder">Coder</button><button data-q="unsloth">unsloth</button><button data-q="bartowski">bartowski</button>
+        </div>
+        <div class="presets">
+          <button class="btn sm" id="hf-pick">Select best quant that fits for each</button>
+          <span class="muted" id="hf-summary"></span>
+        </div>
+        <div id="hf-list" class="hf-list"></div>
+      </div>
+
+      <!-- Downloads -->
+      <div class="panel" data-panel="jobs">
+        <div class="presets">
+          <button class="btn sm ghost" id="jobs-clear">Clear finished</button>
+          <span class="muted" id="jobs-summary"></span>
+        </div>
+        <div id="jobs-list" class="jobs"></div>
+      </div>
+
+      <!-- Installed -->
+      <div class="panel" data-panel="installed">
+        <div id="inst-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Selection bar -->
+  <div class="selbar" id="selbar" hidden>
+    <div class="selbar-inner">
+      <div><b id="sel-count">0</b> selected · <b id="sel-size">0 GB</b> <span id="sel-disk" class="muted"></span></div>
+      <div class="selbar-actions">
+        <button class="btn ghost sm" id="sel-clear">Clear</button>
+        <button class="btn primary" id="sel-go">
+          <svg viewBox="0 0 24 24"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 20h14"/></svg>Download selected
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <dialog id="dlg">
+    <form method="dialog">
+      <h3 id="dlg-title">Confirm download</h3>
+      <div id="dlg-body"></div>
+      <div class="dlg-actions">
+        <button class="btn ghost" value="cancel">Cancel</button>
+        <button class="btn primary" value="ok" id="dlg-ok">Start downloads</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="advisor.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

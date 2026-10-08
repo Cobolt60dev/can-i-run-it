@@ -1,0 +1,17 @@
+{
+  "name": "can-i-run-it",
+  "version": "1.0.0",
+  "description": "Can I Run It? — detects your hardware, recommends the right local AI engine, and downloads the LLMs your machine can actually run (Ollama + Hugging Face GGUF).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js --open",
+    "build": "node scripts/build.js"
+  },
+  "engines": { "node": ">=20" },
+  "keywords": ["llm", "ollama", "gguf", "huggingface", "local-ai", "gpu", "vram", "llama.cpp"],
+  "author": "Paul Bardell - Cobolt60 Studios",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/Cobolt60dev/can-i-run-it",
+  "repository": { "type": "git", "url": "https://github.com/Cobolt60dev/can-i-run-it.git" },
+  "bugs": "https://github.com/Cobolt60dev/can-i-run-it/issues"
+}

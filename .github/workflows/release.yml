@@ -1,0 +1,97 @@
+name: Build & release
+
+# Push a tag like v1.0.0 to build every platform and publish a GitHub Release.
+# "Run workflow" (manual) builds and uploads artifacts without releasing.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: ${{ matrix.target }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: windows-latest,   target: windows-x64 }
+          - { os: ubuntu-latest,    target: linux-x64 }
+          - { os: ubuntu-24.04-arm, target: linux-arm64 }
+          - { os: macos-latest,     target: macos-arm64 }
+          # Intel Macs: inject into the official x64 Node on the Apple Silicon runner.
+          - { os: macos-latest,     target: macos-x64, cross: darwin-x64 }
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Fetch target Node (cross build)
+        if: matrix.cross
+        shell: bash
+        run: |
+          V=$(node -p process.version)
+          curl -fsSL "https://nodejs.org/dist/$V/node-$V-${{ matrix.cross }}.tar.gz" | tar -xz
+          echo "TARGET_NODE=$PWD/node-$V-${{ matrix.cross }}/bin/node" >> "$GITHUB_ENV"
+
+      - name: Build single-file executable
+        shell: bash
+        run: node scripts/build.js --target ${{ matrix.target }} ${TARGET_NODE:+--node "$TARGET_NODE"}
+
+      - name: Smoke test
+        if: '!matrix.cross'
+        shell: bash
+        env:
+          PORT: '5199'
+          AUTO_START_OLLAMA: '0'
+          LLMS_DIR: ${{ runner.temp }}/llms
+        run: |
+          BIN=$(ls dist/can-i-run-it-${{ matrix.target }}*)
+          "$BIN" --no-open > server.log 2>&1 &
+          for i in $(seq 1 30); do curl -fs http://localhost:5199/api/system > /dev/null && break; sleep 1; done
+          curl -fs http://localhost:5199/ | grep -q "Can I Run It?"
+          curl -fs http://localhost:5199/advisor.js > /dev/null
+          curl -fs http://localhost:5199/data/hardware.json | grep -q '"groups"'
+          curl -fs http://localhost:5199/api/system | head -c 400; echo
+          cat server.log
+
+      - name: Package
+        shell: bash
+        run: |
+          cd dist
+          if [[ "${{ matrix.target }}" == windows-* ]]; then
+            7z a -tzip "can-i-run-it-${{ matrix.target }}.zip" "can-i-run-it-${{ matrix.target }}.exe" ../README.md ../LICENSE
+          else
+            cp ../README.md ../LICENSE .
+            tar -czf "can-i-run-it-${{ matrix.target }}.tar.gz" "can-i-run-it-${{ matrix.target }}" README.md LICENSE
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: can-i-run-it-${{ matrix.target }}
+          path: |
+            dist/*.zip
+            dist/*.tar.gz
+
+  release:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: out
+          merge-multiple: true
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" out/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Can I Run It? $GITHUB_REF_NAME" \
+            --generate-notes
