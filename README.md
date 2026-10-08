@@ -1,21 +1,64 @@
+<div align="center">
+
 # Can I Run It?
 
-**Load it on any machine and it tells you which local AI models will run there. It also tells you which engine and build to use, then downloads the models for you.**
+### Stop guessing which AI models your PC can handle.
 
-Windows, Linux and macOS. NVIDIA, AMD, Intel Arc, Apple Silicon (M1–M6), CPU-only, and multi-GPU rigs and clusters.
+Pick your GPU or click **Detect**, and in seconds you know which local LLMs will run, how fast, and which engine to use. Then download the best ones in one click.
 
-- **Detects your hardware**: GPU, VRAM, compute capability, driver, highest CUDA version, CPU, RAM, OS, and which tools are installed (Ollama, llama.cpp, LM Studio, Python, Docker).
-- **Rates every model** as *Full GPU*, *GPU + CPU*, *CPU* or *Too large* for your chosen context length, with an estimated speed in tokens/sec.
-- **Setup guide**: which engine fits your GPU and which build to download, driver checks, and copy-paste setup commands:
-  - Engines: Ollama, llama.cpp (CUDA 13 / CUDA 12.4 / ROCm / Vulkan / SYCL / Metal / CPU), LM Studio, vLLM, ExLlama, MLX, OpenVINO.
-  - Older hardware is handled too: Kepler, Maxwell/Pascal/Volta after CUDA 13, ROCm-dropped AMD cards, and more.
-- **Downloads**:
-  - The live Ollama library (top 80 families with real sizes).
-  - Hugging Face GGUF search, with the best quantization picked for your card.
-  - One-click **Auto-pull best models**.
-  - Pause and resume. The queue survives restarts.
-- **Multi-GPU pool**: combine any cards (e.g. 2× RTX 4090 + RTX 3090), in one PC or across networked PCs.
-- **Uncensored scan**: finds uncensored / abliterated / heretic / Dolphin builds that fit. They're kept in their own `uncensored/` folder and never auto-pulled.
+[![Download](https://img.shields.io/github/v/release/Cobolt60dev/can-i-run-it?label=download&style=for-the-badge&color=5b6cff)](../../releases/latest)
+[![Platforms](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-333?style=for-the-badge)](../../releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/Cobolt60dev/can-i-run-it/total?style=for-the-badge&color=2ea043)](../../releases)
+[![License](https://img.shields.io/github/license/Cobolt60dev/can-i-run-it?style=for-the-badge)](LICENSE)
+
+**One file · nothing to install · no account · no telemetry**
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/library-dark.png">
+  <img alt="Every Ollama model rated Full GPU / GPU + CPU / Too large for an RTX 5080, with estimated tokens per second" src="docs/screenshots/library-light.png" width="100%">
+</picture>
+
+</div>
+
+## Sound familiar?
+
+- *"Will a 70B model fit on my 3090?"*
+- *"Q4_K_M, IQ4_XS or Q6_K? Which quant should I grab?"*
+- *"Does my old GTX 1070 still work now that CUDA 13 is out?"*
+- *"I have an AMD card. Ollama, ROCm or Vulkan?"*
+- *"How fast will it actually be?"*
+
+**Can I Run It?** answers all of these for *your* exact machine, then gets the models for you.
+
+## What you get
+
+| | |
+|---|---|
+| 🎯 **Every model rated for your hardware** | *Full GPU*, *GPU + CPU* or *Too large* at your context length, with an estimated tokens/sec. Covers the live Ollama library and any Hugging Face GGUF. |
+| ⚡ **One-click Auto-pull** | Grabs the newest, biggest model in each family that runs fast on your card. You see the list and total size first. |
+| 🧭 **Setup guide for your GPU** | The right engine and the exact build (CUDA 13 / 12.4, ROCm, Vulkan, SYCL, Metal), driver checks, and copy-paste commands. |
+| 🧓 **Old hardware welcome** | Kepler, Pascal (P40!), Volta, RX 580, MI50, Arc… It tells you what still works and how. |
+| 🖥️🖥️ **Multi-GPU and clusters** | Pool any cards (2× 4090 + 3090?) in one PC or across networked PCs, and see what fits once VRAM is combined. |
+| 🍎 **Every platform** | NVIDIA, AMD, Intel Arc, Apple Silicon M1–M6 (incl. M5 Max/Ultra), Ryzen AI Max, DGX Spark, plain CPUs. |
+| 🔓 **Uncensored scan** | Finds abliterated / uncensored / Dolphin builds that fit, saved to a separate folder and never auto-pulled. |
+| ⏯️ **Downloads that survive anything** | Pause, resume, close the app, reboot. The queue picks up where it left off. |
+
+<table>
+  <tr>
+    <td width="50%"><img alt="Setup guide: Blackwell RTX 5080, engines and builds, driver checks" src="docs/screenshots/guide-dark.png"><br><sub><b>Setup guide</b>: architecture, features, driver checks, and which engine and build to use</sub></td>
+    <td width="50%"><img alt="Multi-GPU pool of 2x RTX 4090 + RTX 3090 running 70B models fully on GPU" src="docs/screenshots/pool-dark.png"><br><sub><b>Multi-GPU pool</b>: 2× 4090 + 3090 runs 70B fully on GPU at ~13 tok/s</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img alt="Uncensored scan of Hugging Face with best quant per model" src="docs/screenshots/uncensored-dark.png"><br><sub><b>Hugging Face GGUF + uncensored scan</b>: the best quant picked for your VRAM</sub></td>
+    <td width="50%"><img alt="Light theme setup guide" src="docs/screenshots/guide-light.png"><br><sub><b>Light and dark themes</b>, following your system setting</sub></td>
+  </tr>
+</table>
+
+## Get started in 3 steps
+
+1. **Download** the file for your system from **[Releases](../../releases/latest)**.
+2. **Run it.** Your browser opens automatically, and it detects your hardware.
+3. **Click "Auto-pull best models"**, or pick your own.
 
 ## Download
 
