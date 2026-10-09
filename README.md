@@ -10,8 +10,11 @@ Pick your GPU or click **Detect**, and in seconds you know which local LLMs will
 [![Platforms](https://img.shields.io/badge/Windows%20%7C%20macOS%20%7C%20Linux-333?style=for-the-badge)](../../releases/latest)
 [![Downloads](https://img.shields.io/github/downloads/Cobolt60dev/can-i-run-it/total?style=for-the-badge&color=2ea043)](../../releases)
 [![License](https://img.shields.io/github/license/Cobolt60dev/can-i-run-it?style=for-the-badge)](LICENSE)
+[![Docs](https://img.shields.io/badge/docs-wiki-8f9bff?style=for-the-badge)](../../wiki)
 
 **One file · nothing to install · no account · no telemetry**
+
+**[📖 Documentation](../../wiki)** · **[⬇ Download](../../releases/latest)** · **[🐛 Report an issue](../../issues)**
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/screenshots/library-dark.png">
@@ -59,6 +62,12 @@ Pick your GPU or click **Detect**, and in seconds you know which local LLMs will
 1. **Download** the file for your system from **[Releases](../../releases/latest)**.
 2. **Run it.** Your browser opens automatically, and it detects your hardware.
 3. **Click "Auto-pull best models"**, or pick your own.
+
+New here? The **[wiki](../../wiki)** walks through everything:
+- [installation](../../wiki/Installation) and [using the app](../../wiki/Using-the-App);
+- [which engine your GPU needs](../../wiki/Setup-Guide-and-Engines);
+- [older GPUs](../../wiki/Older-GPUs) and [multi-GPU setups](../../wiki/Multi-GPU-and-Clusters);
+- [troubleshooting](../../wiki/Troubleshooting).
 
 ## Download
 
